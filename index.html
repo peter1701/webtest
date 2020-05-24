@@ -8,5 +8,26 @@
 <body>
     Test output
     <a href="/add">Add entry</a>
+
+    <ul>
+
+    </ul>
+<script>
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://eqx3yiy5mc.execute-api.us-east-2.amazonaws.com/ListEntries",
+        "method": "GET",
+        "headers": {
+            "content-type": "application/json",
+            "cache-control": "no-cache"
+        },
+        "processData": false
+    };
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+        //location = "/";
+    });
+</script>
 </body>
 </html>
