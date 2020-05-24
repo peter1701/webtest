@@ -33,7 +33,7 @@
             }
             $('#entries').append('<li>'+item.id.N+' '+item.name.S+'</li>');
         });
-        localStorage.setItem("nextId", highestId+1);
+        localStorage.setItem("nextId", parseInt(highestId)+1);
     });
 </script>
 </body>
