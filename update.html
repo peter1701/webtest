@@ -44,8 +44,8 @@ Test output
         localStorage.setItem("nextId", parseInt(highestId)+1);
     });
 
-    $(document).click('.updateButton',function(){
-        var id = $(this).data('id');
+    $(document).click('.updateButton',function(e){
+        var id = $(e.target).data('id');
         var $tableRow = $('#tablerow-'+id);
 
         var $namedata = $tableRow.find('.name-value');
@@ -75,12 +75,12 @@ Test output
             var name = $namedata.text();
             $namedata.text('');
             $nameInput.val(name);
-            $(this).text('Save');
+            $(e.target).text('Save');
         }
     });
 
-    $(document).click('.deleteButton',function(){
-        var id = $(this).data('id');
+    $(document).click('.deleteButton',function(e){
+        var id = $(e.target).data('id');
         var $tableRow = $('#tablerow-'+id);
         var settings = {
             "async": true,
