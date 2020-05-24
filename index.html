@@ -26,9 +26,14 @@
     };
     $.ajax(settings).done(function (response) {
         list = JSON.parse(response);
+        var highestId = 0;
         list.forEach(function(item){
+            if ( highestId < item.id.N ){
+                highestId = item.id.N;
+            }
             $('#entries').append('<li>'+item.id.N+' '+item.name.S+'</li>');
         });
+        localStorage.setItem("nextId", highestId+1);
     });
 </script>
 </body>

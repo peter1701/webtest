@@ -12,9 +12,13 @@
 <input type="text" placeholder="Name" id="name">
 <button id="add_button">Add</button>
 <script>
+    if ( localStorage.getItem('nextId') && localStorage.getItem('nextId') !== null ) {
+        $('#id').val(localStorage.getItem('nextId'));
+        $('#id').hide();
+    }
+
     $("#add_button").click(function(){
-        //var id = $("#id").val();
-        var id = 0;
+        var id = $("#id").val();
         var name = $("#name").val();
         var settings = {
             "async": true,
