@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Test output
+<a href="/add">Add entry</a>
+
+<table>
+    <tbody id="entries">
+
+    </tbody>
+</table>
+<script>
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://eqx3yiy5mc.execute-api.us-east-2.amazonaws.com/ListEntries",
+        "method": "GET",
+        "headers": {
+            "content-type": "application/json",
+            "cache-control": "no-cache"
+        },
+        "processData": false
+    };
+    $.ajax(settings).done(function (response) {
+        list = JSON.parse(response);
+        var highestId = 0;
+        list.forEach(function(item){
+            if ( highestId < item.id.N ){
+                highestId = item.id.N;
+            }
+            $('#entries').append(
+                '<tr id="tablerow-'+item.id.N+'">' +
+                    '<td class="id-value">'+item.id.N+'</td>' +
+                    '<td class="name-value">'+item.name.S+'</td>' +
+                    '<td><button id="updateButton" data-id="'+item.id.N+'">Update</button></td>' +
+                    '<td><button id="deleteButton" data-id="'+item.id.N+'">Delete</button></td>' +
+                '</tr>');
+        });
+        localStorage.setItem("nextId", parseInt(highestId)+1);
+    });
+
+    $('#updateButton').click(function(){
+        var id = $(this).data('id');
+        var $tableRow = $('#tablerow-'+id);
+
+        var $namedata = $tableRow.find('.name-value');
+        var $nameInput = $tableRow.find('.name-input');
+
+        if ( $nameInput.length ){
+            var name = $nameInput.val();
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "https://eqx3yiy5mc.execute-api.us-east-2.amazonaws.com/UpdateEntry",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache"
+                },
+                "processData": false,
+                "data": "{\"id\":"+id+",\"name\":\""+name+"\"}"
+            };
+            $.ajax(settings).done(function (response) {
+                $nameInput.remove();
+                $namedata.text(name);
+            });
+        } else {
+            $namedata.append('<input type="text" class="name-input">');
+            $nameInput = $tableRow.find('.name-input');
+            var name = $namedata.text();
+            $namedata.text('');
+            $nameInput.val(name);
+            $(this).text('Save');
+        }
+    });
+
+    $('#deleteButton').click(function(){
+        var id = $(this).data('id');
+        var $tableRow = $('#tablerow-'+id);
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://eqx3yiy5mc.execute-api.us-east-2.amazonaws.com/DeleteEntry",
+            "method": "POST",
+            "headers": {
+                "content-type": "application/json",
+                "cache-control": "no-cache"
+            },
+            "processData": false,
+            "data": "{\"id\":"+id+"}"
+        };
+        $.ajax(settings).done(function (response) {
+            $tableRow.remove();
+        });
+    });
+</script>
+</body>
+</html>
