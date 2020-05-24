@@ -6,5 +6,33 @@
 </head>
 <body>
     Add entry
+
+<input type="number" placeholder="ID" id="id">
+<input type="text" placeholder="Name" id="name">
+<button id="add_button">Add</button>
+<script>
+    var id = $("#id").val();
+    var name = $("#name").val();
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://eqx3yiy5mc.execute-api.us-east-2.amazonaws.com/test",
+        "method": "POST",
+        "headers": {
+            "content-type": "application/json",
+            "cache-control": "no-cache"
+        },
+        "processData": false,
+        "data": "{\"id\":"+id+",\"name\":\""+name+"\"}"
+    }
+
+    $("#add_button").click(function{
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+        });
+    });
+    location = "/";
+</script>
+
 </body>
 </html>
