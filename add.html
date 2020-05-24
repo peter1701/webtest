@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     Add entry
@@ -26,7 +27,7 @@
         "data": "{\"id\":"+id+",\"name\":\""+name+"\"}"
     }
 
-    $("#add_button").click(function{
+    $("#add_button").click(function(){
         $.ajax(settings).done(function (response) {
             console.log(response);
         });
