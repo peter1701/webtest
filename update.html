@@ -37,14 +37,14 @@ Test output
                 '<tr id="tablerow-'+item.id.N+'">' +
                     '<td class="id-value">'+item.id.N+'</td>' +
                     '<td class="name-value">'+item.name.S+'</td>' +
-                    '<td><button id="updateButton" data-id="'+item.id.N+'">Update</button></td>' +
-                    '<td><button id="deleteButton" data-id="'+item.id.N+'">Delete</button></td>' +
+                    '<td><button class="updateButton" data-id="'+item.id.N+'">Update</button></td>' +
+                    '<td><button class="deleteButton" data-id="'+item.id.N+'">Delete</button></td>' +
                 '</tr>');
         });
         localStorage.setItem("nextId", parseInt(highestId)+1);
     });
 
-    $('#updateButton').click(function(){
+    $(document).click('.updateButton',function(){
         var id = $(this).data('id');
         var $tableRow = $('#tablerow-'+id);
 
@@ -79,7 +79,7 @@ Test output
         }
     });
 
-    $('#deleteButton').click(function(){
+    $(document).click('.deleteButton',function(){
         var id = $(this).data('id');
         var $tableRow = $('#tablerow-'+id);
         var settings = {
