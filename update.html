@@ -70,10 +70,11 @@ Test output
                 $namedata.text(name);
             });
         } else {
-            $namedata.append('<input type="text" class="name-input">');
-            $nameInput = $tableRow.find('.name-input');
             var name = $namedata.text();
             $namedata.text('');
+            $namedata.append('<input type="text" class="name-input">');
+            $nameInput = $tableRow.find('.name-input');
+
             $nameInput.val(name);
             $(e.target).text('Save');
         }
