@@ -68,6 +68,7 @@ Test output
             $.ajax(settings).done(function (response) {
                 $nameInput.remove();
                 $namedata.text(name);
+                $(e.target).text('Update');
             });
         } else {
             var name = $namedata.text();
