@@ -26,8 +26,8 @@
     };
     $.ajax(settings).done(function (response) {
         console.log(response);
-        list = Json.parse(response);
-        list.each(function(item){
+        list = JSON.parse(response);
+        list.forEach(function(item){
             $('#entries').append('<li>'+item.id.N+' '+item.name.S+'</li>');
         });
     });
