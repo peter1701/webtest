@@ -9,7 +9,7 @@
     Test output
     <a href="/add">Add entry</a>
 
-    <ul>
+    <ul id="entries">
 
     </ul>
 <script>
@@ -26,7 +26,10 @@
     };
     $.ajax(settings).done(function (response) {
         console.log(response);
-        //location = "/";
+        list = Json.parse(response);
+        list.each(function(item){
+            $('#entries').append('<li>'+item.id.N+' '+item.name.S+'</li>');
+        });
     });
 </script>
 </body>
