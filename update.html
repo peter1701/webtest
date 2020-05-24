@@ -44,7 +44,7 @@ Test output
         localStorage.setItem("nextId", parseInt(highestId)+1);
     });
 
-    $(document).click('.updateButton',function(e){
+    $(document).on('click','.updateButton',function(e){
         var id = $(e.target).data('id');
         var $tableRow = $('#tablerow-'+id);
 
@@ -79,7 +79,7 @@ Test output
         }
     });
 
-    $(document).click('.deleteButton',function(e){
+    $(document).on('click','.deleteButton',function(e){
         var id = $(e.target).data('id');
         var $tableRow = $('#tablerow-'+id);
         var settings = {
