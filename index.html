@@ -3,16 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>Title</title>
+    <title>Guestbook</title>
 </head>
 <body>
-    Test output
-    <a href="/add">Add entry</a>
-    <a href="update">Update entries</a>
+    <h1>Guestbook</h1><br>
+    <a href="/add">Add entry</a><br>
+    <a href="/update">Update entries</a><br>
 
-    <ul id="entries">
+    <h2>Entries:</h2>
+    <table id="entries" border="1" style="border: black 1px">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>E-Mail</td>
+                <td>Message</td>
+                <td>Date</td>
+            </tr>
+        </thead>
+        <tbody>
 
-    </ul>
+        </tbody>
+    </table>
 <script>
     var settings = {
         "async": true,
@@ -25,14 +37,36 @@
         },
         "processData": false
     };
+
     $.ajax(settings).done(function (response) {
         list = JSON.parse(response);
         var highestId = 0;
         list.forEach(function(item){
+
+            var date = new Date(parseInt(item.date.N));
+
+            var mm = date.getMonth() + 1; // getMonth() is zero-based
+            var dd = date.getDate();
+
+            date = [date.getFullYear(),
+                (mm>9 ? '' : '0') + mm,
+                (dd>9 ? '' : '0') + dd
+            ].join('-');
+
             if ( highestId < item.id.N ){
                 highestId = item.id.N;
             }
-            $('#entries').append('<li>'+item.id.N+' '+item.name.S+'</li>');
+
+            $('#entries tbody').append(
+                '<tr>' +
+                    '<td>'+item.id.N+'</td>' +
+                    '<td>'+item.name.S+'</td>' +
+                    '<td>'+item.email.S+'</td>' +
+                    '<td>'+item.message.S+'</td>' +
+                    '<td>'+date+'</td>' +
+
+                '</tr>'
+            );
         });
         localStorage.setItem("nextId", parseInt(highestId)+1);
     });

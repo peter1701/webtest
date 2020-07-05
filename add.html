@@ -1,43 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
-<body>
-    Add entry
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <h1>Add Entry</h1>
 
-<input type="number" placeholder="ID" id="id">
-<input type="text" placeholder="Name" id="name">
-<button id="add_button">Add</button>
-<script>
-    if ( localStorage.getItem('nextId') && localStorage.getItem('nextId') !== null ) {
-        $('#id').val(localStorage.getItem('nextId'));
-        $('#id').hide();
-    }
+        <input type="number" placeholder="ID" id="id"></br>
+        <input type="text" placeholder="Name" id="name"></br>
+        <input type="email" placeholder="E-Mail" id="email"/></br>
+        <textarea placeholder="Message" id="message"></textarea></br>
+        <button id="add_button">Add</button>
 
-    $("#add_button").click(function(){
-        var id = $("#id").val();
-        var name = $("#name").val();
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://eqx3yiy5mc.execute-api.us-east-2.amazonaws.com/UpdateEntry",
-            "method": "POST",
-            "headers": {
-                "content-type": "application/json",
-                "cache-control": "no-cache"
-            },
-            "processData": false,
-            "data": "{\"id\":"+id+",\"name\":\""+name+"\"}"
-        };
-        $.ajax(settings).done(function (response) {
-            location = "/";
-        });
-    });
+        <script>
+            if (localStorage.getItem('nextId') && localStorage.getItem('nextId') !== null) {
+                $('#id').val(localStorage.getItem('nextId'));
+                $('#id').hide();
+            }
 
-</script>
+            $("#add_button").click(function () {
+                var id = $("#id").val();
+                var name = $("#name").val();
+                var email = $("#email").val();
+                var message = $("#message").val();
+                var date = Date.now();
 
-</body>
+                date = date.toString();
+
+                var data = {
+                    id: id,
+                    name: name,
+                    email: email,
+                    message: message,
+                    date: date
+                };
+
+                var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "https://eqx3yiy5mc.execute-api.us-east-2.amazonaws.com/UpdateEntry",
+                    "method": "POST",
+                    "headers": {
+                        "content-type": "application/json",
+                        "cache-control": "no-cache"
+                    },
+                    "processData": false,
+                    "data": JSON.stringify(data)
+                };
+
+                $.ajax(settings).done(function (response) {
+                    location = "/";
+                });
+            });
+
+        </script>
+    </body>
 </html>

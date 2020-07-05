@@ -6,7 +6,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-Test output
+<h1>Update Entries</h1>
+
 <a href="/add">Add entry</a>
 
 <table>
@@ -30,6 +31,17 @@ Test output
         list = JSON.parse(response);
         var highestId = 0;
         list.forEach(function(item){
+
+            var date = new Date(parseInt(item.date.N));
+
+            var mm = date.getMonth() + 1; // getMonth() is zero-based
+            var dd = date.getDate();
+
+            date = [date.getFullYear(),
+                (mm>9 ? '' : '0') + mm,
+                (dd>9 ? '' : '0') + dd
+            ].join('-');
+
             if ( highestId < item.id.N ){
                 highestId = item.id.N;
             }
@@ -37,6 +49,10 @@ Test output
                 '<tr id="tablerow-'+item.id.N+'">' +
                     '<td class="id-value">'+item.id.N+'</td>' +
                     '<td class="name-value">'+item.name.S+'</td>' +
+                    '<td class="email-value">'+item.email.S+'</td>' +
+                    '<td class="message-value">'+item.message.S+'</td>' +
+                    '<td class="date-value">'+date+'</td>' +
+
                     '<td><button class="updateButton" data-id="'+item.id.N+'">Update</button></td>' +
                     '<td><button class="deleteButton" data-id="'+item.id.N+'">Delete</button></td>' +
                 '</tr>');
@@ -48,11 +64,30 @@ Test output
         var id = $(e.target).data('id');
         var $tableRow = $('#tablerow-'+id);
 
-        var $namedata = $tableRow.find('.name-value');
-        var $nameInput = $tableRow.find('.name-input');
+        var fields = ['name', 'email', 'message'];
 
-        if ( $nameInput.length ){
-            var name = $nameInput.val();
+        if ($(e.target).data('action') != 'save') {
+
+            fields.forEach(function (e) {
+                var $data = $tableRow.find('.' + e + '-value');
+                var value = $data.text();
+                $data.text('');
+                $data.append('<input type="text" class="' + e + '-input">');
+                $input = $tableRow.find('.' + e + '-input');
+
+                $input.val(value);
+            });
+            $(e.target).data('action', 'save');
+        } else {
+            var data = {};
+            data.id = id;
+
+            fields.forEach(function(e){
+                data[e] = $tableRow.find('.' + e + '-input').val();
+            });
+
+            data.date = Date.now().toString();
+
             var settings = {
                 "async": true,
                 "crossDomain": true,
@@ -63,21 +98,21 @@ Test output
                     "cache-control": "no-cache"
                 },
                 "processData": false,
-                "data": "{\"id\":"+id+",\"name\":\""+name+"\"}"
+                "data": JSON.stringify(data)
             };
-            $.ajax(settings).done(function (response) {
-                $nameInput.remove();
-                $namedata.text(name);
-                $(e.target).text('Update');
-            });
-        } else {
-            var name = $namedata.text();
-            $namedata.text('');
-            $namedata.append('<input type="text" class="name-input">');
-            $nameInput = $tableRow.find('.name-input');
 
-            $nameInput.val(name);
-            $(e.target).text('Save');
+            $.ajax(settings).done(function (response) {
+                fields.forEach(function (e) {
+                    var $input = $tableRow.find('.' + e + '-input');
+                    var $data = $tableRow.find('.' + e + '-value');
+                    var value = $input.val();
+                    $input.remove();
+                    $data.text(value);
+                });
+
+                $(e.target).text('Update');
+                $(e.target).data('action','update');
+            });
         }
     });
 
